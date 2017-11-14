@@ -1,3 +1,5 @@
+
+var httpMock = function(){
 var
 	perguntas = 
 [
@@ -107,8 +109,6 @@ var
     "id": 4
   }
 ];
-
-var httpMock = function(){
 	
 	var usuarios = [];
 	
@@ -138,28 +138,45 @@ var httpMock = function(){
 		
 		data = {};
 						
-		if (url == url_add_user) {
-			var o = addUser(params.login, params.senha);
-			data.usuario = o;
-			return result;
-		}				
-		
-		if (url == url_checar_user) {
-			if (!getUser(params.login)) {
-				data.erro = 'Usuario não encontrado';
+		if (url == url_remover) {
+			var index = -1;	
+
+			for (var i = 0; i < perguntas.length; i++) {
+				if ( perguntas[i].id === params.id ) {
+					index = i;
+					break;				
+				}
 			}
+			if( index === -1 ) {
+				data.erro = 'Registro não encontrado';
+				return result;
+			} 
+			
+			perguntas.splice( index, 1 );	
 			return result;
-		}
-		
-		if (url == url_checar_senha) {
-			var o = getUser(params.login);
-			if (o.senha == params.senha) {
-				data.usuario = o;
+		}	
+
+		if (url == url_getById) {
+			var index = -1;	
+
+			for (var i = 0; i < perguntas.length; i++) {
+				if ( perguntas[i].id === params.id ) {
+					index = i;
+					data.o = perguntas[i];
+					break;				
+				}
 			}
+			if( index === -1 ) {
+				data.erro = 'Registro não encontrado';
+				return result;
+			} 
+			
 			return result;
 		}	
 		
-		if (url == url_pesquisa) {
+		
+		
+		if (url == url_pesquisar) {
 			data = {list : []};
 			/*
 			function addPergunta(pergunta,opcao1,opcao2,opcao3,opcao4,opcaoCorreta){
@@ -180,7 +197,6 @@ var httpMock = function(){
 			addPergunta('Onde fica Brasilia?','Canadá','Brasil','Bolívia','Chile',1);
 			*/
 			if ((params.text == undefined) || (params.text == '')) {
-				//slice clona o array, pq em js, array e passado por referencia e isso alteraria a lista original
 				data.list = perguntas.slice();
 			} else {
 				for (var i = 0; i < perguntas.length; i++) {

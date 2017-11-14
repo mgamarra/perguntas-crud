@@ -1,8 +1,9 @@
 var $s, $s1;
-const url_add_user = '<url_add_user>';
-const url_checar_user = '<url_checar_user>';
-const url_checar_senha = '<url_checar_senha>';
-const url_pesquisa = '<url_pesquisa>';
+var vm;
+
+const url_pesquisar = '<url_pesquisar>';
+const url_getById = '<url_getById>';
+const url_remover = '<url_remover>';
 
 
 
@@ -17,13 +18,16 @@ app.directive('eatClick', function() {
 });
 
 app.controller("ctrl", function ($scope, $http, $timeout) {
-	
+
+		
 	$s = $scope;
+	
+	vm = this;
 	//$s.http = $http;
 	$s.http = httpMock;
 
 	$s.pesquisa = {showResultado: false};
-
+	$s.formEdicao = {};
 		
 	$s.aba = 'pesquisa';
 	$s1 = $scope;
@@ -68,13 +72,13 @@ app.controller("ctrl", function ($scope, $http, $timeout) {
 		request($s.http.get, url, params, onSuccessFunction, onFailFunction);
 	}
 
-	$s.btnPesquisaClick = function(){
-		console.log($s.pes);
+	$s.btnPesquisarClick = function(){
+		//console.log($s.pes);
 		$s.pesquisa.showResultado = true;
 		$s.pesquisaExecutar();
 	}
 
-	$s.pesquisaLimpar = function(){
+	$s.btnPesquisaLimparClick = function(){
 		//limpa o form de pesquisa
 		$s.pes = {};
 
@@ -82,10 +86,46 @@ app.controller("ctrl", function ($scope, $http, $timeout) {
 		$s.pesquisa.showResultado = false;
 	}
 
+	$s.btnRowEditClick = function(id) {
+		$s.aba = 'cadastro';
+	}
+	$s.btnRowRemoveClick = function(id){
+		get(url_remover, {id:id}, function(data){
+			
+			if (data.erro) {
+				$s.erro = data.erro;
+			} else {
+				var index = -1;	
+				for (var i = 0; i < $s.pesquisa.items.length; i++) {
+					if ( $s.pesquisa.items[i].id === id ) {
+						index = i;
+						break;				
+					}
+				}
+				if( index !== -1 ) {
+					$s.pesquisa.items.splice( index, 1 );	
+				}
+			}
+
+		});
+
+	}
+
+
 	$s.abaPesquisa = function(){
 		$s.aba = 'pesquisa';
 	}
 
+	$s.getById = function(id){
+		
+		get(url_getById, {id:id}, function(data){
+			$s.formEdicao.o = data.o;	
+			
+			vm.records = data.o.opcoes;
+			console.log($s.pesquisa.items);
+
+		});
+	}
 
 	$s.pesquisaExecutar = function(){
 		//limpa a lista de consulta, nesse momento a table fica vazia
@@ -93,7 +133,7 @@ app.controller("ctrl", function ($scope, $http, $timeout) {
 		// caso o campo de pesquisa esteja preenchido, usar texto para pesquisa, caso contrário usar branco
 		let text = $s.pes  ? $s.pes.text : '';
 		
-		get(url_pesquisa, {text:text}, function(data){
+		get(url_pesquisar, {text:text}, function(data){
 			// a lista de consulta recebe o retorno.
 			$s.pesquisa.items = data.list;	
 			
@@ -102,21 +142,7 @@ app.controller("ctrl", function ($scope, $http, $timeout) {
 		});
 	}
 	
-	$scope.removeRow = function(id){				
-		var index = -1;		
-		for( var i = 0; i < $s.pesquisa.items.length; i++ ) {
-			if( $s.pesquisa.items[i].id === id ) {
-				index = i;
-				break;
-			}
-		}
-		if( index === -1 ) {
-			alert( "Something gone wrong" );
-		}
-		$s.pesquisa.items.splice( index, 1 );		
-	};
-
-
+	$s.getById(1);
 
 	$('body').show();
 
