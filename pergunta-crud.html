@@ -1,0 +1,101 @@
+<html ng-app="app" ng-controller="ctrl" ng-keydown="keydown($event)">
+<meta charset="UTF-8">
+<head>
+    <link href="source/bootstrap-3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<link href="a.css" rel="stylesheet">
+</head>
+<body hidden="true">
+
+<div id="main" class="container-fluid" style="margin-top: 50px">
+	<div ng-show="erro" class="formPequeno alert alert-danger text-center">
+		<strong>{{erro}}</strong>
+	</div>	
+	
+	<div class="container" ng-show1="aba == 'pesquisa'">
+	<div class="container">
+		
+		<br/>
+		<form action="" class="form-horizontal">
+			<fieldset>
+				<legend>Pesquisa de Perguntas</legend>
+			
+			<div class="form-group">
+				<label for="pes.text" class="control-label col-sm-2">Texto</label>
+				<div class="col-sm-6">
+					<input type="text" name="pes.text" class="form-control" ng-model="pes.text">
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-12 text-right">
+					<button class="btn btn-primary" ng-click="btnPesquisaClick()" eat-click><span class="glyphicon glyphicon-refresh"></span>Pesquisar</button>
+					<button class="btn btn-warning" ng-click="pesquisaLimpar()"><span class="glyphicon glyphicon-backward"></span>Resetar</button>
+					<button class="btn btn-success"><span class="glyphicon glyphicon-save"></span>Nova</button>
+				</div>
+			</div>
+			</fieldset>
+		</form>
+		<hr>
+		<table ng-show="pesquisa.showResultado" class="table table-bordered table-hover table-condensed table-striped">
+			<thead>
+				<tr>
+					<th>id</th>
+					<th>Text</th>
+					<th style="width:125px;">Ação</th>
+				</tr>
+			</thead>
+			<tbody>
+				  <tr ng-repeat="o in pesquisa.items">
+					<td>{{ o.id }}</td>
+					<td>{{ o.text }}</td>
+					<td>
+							<button class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></button>
+							<button class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button>
+ 					</td>
+				  </tr>
+			</tbody>
+		</table>
+	</div>
+
+	</div>	
+
+	<div ng-show1="aba == 'cadastro'">
+		<div class="jumbotron formPequeno">
+			<div class="form-group text-center">
+				<label>Informe os dados do Usuário</label>
+			</div>
+			<div class="form-group">
+				<input placeholder="Login" type="text" maxlength="50" class="form-control focus" ng-model="login"/>
+			</div>
+			<div class="form-group">
+				<input placeholder="Senha" type="password" maxlength="50" class="form-control" ng-model="senha"/>
+			</div>
+			<div class="form-group">
+				<input placeholder="Confirmar Senha" type="password" maxlength="50" class="form-control" ng-model="senha2"/>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<button class="btn btn-danger btn-block" ng-click="logout()">Cancelar</button>
+				</div>
+				<div class="col-md-6">
+					<button class="btn btn-primary btn-block" ng-click="prosseguirCadastro()" ng-disabled="!login||!senha||senha!=senha2">Prosseguir</button>
+				</div>
+				<div class="col-md-6">
+					<button class="btn btn-danger btn-block" ng-click="abaPesquisa()">Cancelar</button>
+				</div>
+			</div>
+		</div>
+	</div>	
+Show HTML: <input type="checkbox" ng-model="myVar">
+<div ng-show="myVar">
+<h1>Welcome</h1>
+<p>Welcome to my home.</p>
+</div>
+</div>
+	
+</body>
+</html>
+<script src="jquery-3.1.0.min.js"></script>
+<script src="angular-1.6.6.min.js"></script>
+  
+<script src="pergunta-crud-mock.js"></script>
+<script src="pergunta-crud.js"></script>
