@@ -180,7 +180,8 @@ var httpMock = function(){
 			addPergunta('Onde fica Brasilia?','Canadá','Brasil','Bolívia','Chile',1);
 			*/
 			if ((params.text == undefined) || (params.text == '')) {
-				data.list = perguntas;
+				//slice clona o array, pq em js, array e passado por referencia e isso alteraria a lista original
+				data.list = perguntas.slice();
 			} else {
 				for (var i = 0; i < perguntas.length; i++) {
 					var o = perguntas[i];

@@ -102,6 +102,20 @@ app.controller("ctrl", function ($scope, $http, $timeout) {
 		});
 	}
 	
+	$scope.removeRow = function(id){				
+		var index = -1;		
+		for( var i = 0; i < $s.pesquisa.items.length; i++ ) {
+			if( $s.pesquisa.items[i].id === id ) {
+				index = i;
+				break;
+			}
+		}
+		if( index === -1 ) {
+			alert( "Something gone wrong" );
+		}
+		$s.pesquisa.items.splice( index, 1 );		
+	};
+
 
 
 	$('body').show();
