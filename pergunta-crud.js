@@ -121,7 +121,7 @@ app.controller("ctrl", function ($scope, $http, $timeout) {
 		get(url_getById, {id:id}, function(data){
 			$s.formEdicao.o = data.o;	
 			
-			vm.records = data.o.opcoes;
+			//vm.records = data.o.opcoes;
 			console.log($s.pesquisa.items);
 
 		});
@@ -142,6 +142,17 @@ app.controller("ctrl", function ($scope, $http, $timeout) {
 		});
 	}
 	
+	$s.opcoesRemover = function(index){
+		//$s.formEdicao.o.opcoes.splice(index, 1);]
+		if ($s.formEdicao.o.opcoes[index].status == 'deletado' ) {
+			$s.formEdicao.o.opcoes[index].status = '';
+		} else {
+			$s.formEdicao.o.opcoes[index].status = 'deletado';
+		}
+	}
+	$s.opcoesAdicionar = function(){
+		$s.formEdicao.o.opcoes.push({id: null, text:'', correta: false});
+	}	
 	$s.getById(1);
 
 	$('body').show();
