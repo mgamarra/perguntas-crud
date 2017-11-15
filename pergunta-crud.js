@@ -9,6 +9,7 @@ const url_remover = '<url_remover>';
 
 var app = angular.module("app",[]);
 
+//diretiva para resolver o post dos botoes
 app.directive('eatClick', function() {
     return function(scope, element, attrs) {
         $(element).click(function(event) {
@@ -16,6 +17,29 @@ app.directive('eatClick', function() {
         });
     }
 });
+
+
+
+//diretiva para exibir a tela de confirmação. Usada na consulta de questões
+app.directive("ngConfirmClick", [
+  function() {
+   return {
+     priority: -1,
+      restrict: "A",
+      link: function(scope, element, attrs) {
+        element.bind("click", function(e) {
+          var message;
+          message = attrs.ngConfirmClick;
+          if (message && !confirm(message)) {
+           e.stopImmediatePropagation();
+           e.preventDefault();
+          }
+        });
+      }
+    };
+  }
+])
+
 
 app.controller("ctrl", function ($scope, $http, $timeout) {
 
@@ -26,7 +50,7 @@ app.controller("ctrl", function ($scope, $http, $timeout) {
 	//$s.http = $http;
 	$s.http = httpMock;
 
-	$s.pesquisa = {showResultado: false};
+	$s.pesquisa = {};
 	$s.formEdicao = {};
 		
 	$s.aba = 'pesquisa';
@@ -73,8 +97,6 @@ app.controller("ctrl", function ($scope, $http, $timeout) {
 	}
 
 	$s.btnPesquisarClick = function(){
-		//console.log($s.pes);
-		$s.pesquisa.showResultado = true;
 		$s.pesquisaExecutar();
 	}
 
@@ -82,12 +104,21 @@ app.controller("ctrl", function ($scope, $http, $timeout) {
 		//limpa o form de pesquisa
 		$s.pes = {};
 
-		//Esconde a grid de resutado
-		$s.pesquisa.showResultado = false;
+		//limpa a lista de consulta, nesse momento a table fica vazia e é oculta pela diretiva ng-show 
+		$s.pesquisa.items = [];	
 	}
 
 	$s.btnRowEditClick = function(id) {
-		$s.aba = 'cadastro';
+		
+		//recupera o registro pelo id passado da grid
+		get(url_getById, {id:id}, function(data){
+			
+			//coloco o objeto model
+			$s.formEdicao.o = data.o;	
+			//set a aba do cadastro
+			$s.aba = 'cadastro';
+
+		});		
 	}
 	$s.btnRowRemoveClick = function(id){
 		get(url_remover, {id:id}, function(data){
@@ -111,7 +142,17 @@ app.controller("ctrl", function ($scope, $http, $timeout) {
 
 	}
 
-
+	$s.opcaoUpdate = function(index) {
+        for (var i=0;i<$s.formEdicao.o.opcoes.length; i++) {
+            if (index != i) {
+                $s.formEdicao.o.opcoes[i].correta = 'false';
+            }
+        }
+	}
+	$s.btnVoltaAbaConsulta = function(){
+		$s.abaPesquisa();
+	}
+	
 	$s.abaPesquisa = function(){
 		$s.aba = 'pesquisa';
 	}
@@ -128,7 +169,7 @@ app.controller("ctrl", function ($scope, $http, $timeout) {
 	}
 
 	$s.pesquisaExecutar = function(){
-		//limpa a lista de consulta, nesse momento a table fica vazia
+		//limpa a lista de consulta, nesse momento a table fica vazia e é oculta pela diretiva ng-show 
 		$s.pesquisa.items = [];	
 		// caso o campo de pesquisa esteja preenchido, usar texto para pesquisa, caso contrário usar branco
 		let text = $s.pes  ? $s.pes.text : '';
@@ -153,7 +194,7 @@ app.controller("ctrl", function ($scope, $http, $timeout) {
 	$s.opcoesAdicionar = function(){
 		$s.formEdicao.o.opcoes.push({id: null, text:'', correta: false});
 	}	
-	$s.getById(1);
+	
 
 	$('body').show();
 

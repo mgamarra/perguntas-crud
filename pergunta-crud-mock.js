@@ -6,38 +6,38 @@ var
   {
     "opcoes": [
       {
-        "correta": false,
-        "text": "nostrud magna deserunt velit ea",
+        "correta": 'true',
+        "text": "1 nostrud magna deserunt velit ea",
         "id": 0
       },
       {
-        "correta": false,
-        "text": "laborum nulla veniam qui aliquip",
+        "correta": 'false',
+        "text": "2 laborum nulla veniam qui aliquip",
         "id": 1
       },
       {
-        "correta": false,
-        "text": "nulla labore ullamco laboris esse",
+        "correta": 'false',
+        "text": "3 nulla labore ullamco laboris esse",
         "id": 2
       }
     ],
-    "text": "est voluptate laborum Lorem voluptate",
+    "text": "1  est voluptate laborum Lorem voluptate",
     "id": 0
   },
   {
     "opcoes": [
       {
-        "correta": false,
+        "correta": 'false',
         "text": "velit cillum enim voluptate exercitation",
         "id": 0
       },
       {
-        "correta": false,
+        "correta": 'true',
         "text": "nulla quis duis aliqua eu",
         "id": 1
       },
       {
-        "correta": false,
+        "correta": 'false',
         "text": "sit mollit pariatur consectetur in",
         "id": 2
       }
@@ -48,17 +48,17 @@ var
   {
     "opcoes": [
       {
-        "correta": false,
+        "correta": 'false',
         "text": "eiusmod do id labore aliquip",
         "id": 0
       },
       {
-        "correta": false,
+        "correta": 'false',
         "text": "pariatur aute aute ipsum consequat",
         "id": 1
       },
       {
-        "correta": false,
+        "correta": 'true',
         "text": "ullamco enim incididunt aute irure",
         "id": 2
       }
@@ -69,17 +69,17 @@ var
   {
     "opcoes": [
       {
-        "correta": false,
+        "correta": 'true',
         "text": "nisi quis ex exercitation do",
         "id": 0
       },
       {
-        "correta": false,
+        "correta": 'false',
         "text": "proident proident laboris cupidatat dolore",
         "id": 1
       },
       {
-        "correta": false,
+        "correta": 'false',
         "text": "Lorem officia et nostrud tempor",
         "id": 2
       }
@@ -90,17 +90,17 @@ var
   {
     "opcoes": [
       {
-        "correta": false,
+        "correta": 'false',
         "text": "non cupidatat anim qui mollit",
         "id": 0
       },
       {
-        "correta": false,
+        "correta": 'true',
         "text": "aliquip culpa consectetur officia mollit",
         "id": 1
       },
       {
-        "correta": false,
+        "correta": 'false',
         "text": "officia sit nisi occaecat anim",
         "id": 2
       }
@@ -110,21 +110,40 @@ var
   }
 ];
 	
-	var usuarios = [];
 	
-	function addUser(login,senha){
-		var o = {login:login, senha:senha};
-		o.id = usuarios.length + 1;
-		usuarios.push(o);
-		return o;
-	}
-	function getUser(login){
-		return usuarios.filter(function(o){
-			return o.login == login;
-		})[0];
-	}
-	
-	addUser('adm','123');
+function clone(obj) {
+    var copy;
+
+    // Handle the 3 simple types, and null or undefined
+    if (null == obj || "object" != typeof obj) return obj;
+
+    // Handle Date
+    if (obj instanceof Date) {
+        copy = new Date();
+        copy.setTime(obj.getTime());
+        return copy;
+    }
+
+    // Handle Array
+    if (obj instanceof Array) {
+        copy = [];
+        for (var i = 0, len = obj.length; i < len; i++) {
+            copy[i] = clone(obj[i]);
+        }
+        return copy;
+    }
+
+    // Handle Object
+    if (obj instanceof Object) {
+        copy = {};
+        for (var attr in obj) {
+            if (obj.hasOwnProperty(attr)) copy[attr] = clone(obj[attr]);
+        }
+        return copy;
+    }
+
+    throw new Error("Unable to copy obj! Its type isn't supported.");
+}	
 	
 	var data;
 	
@@ -162,7 +181,7 @@ var
 			for (var i = 0; i < perguntas.length; i++) {
 				if ( perguntas[i].id === params.id ) {
 					index = i;
-					data.o = perguntas[i];
+					data.o = clone(perguntas[i]);
 					break;				
 				}
 			}
