@@ -21,6 +21,7 @@ app.directive('eatClick', function() {
 
 
 //diretiva para exibir a tela de confirmação. Usada na consulta de questões
+//devese colocar o atributo ng-confirm-click no botao 
 app.directive("ngConfirmClick", [
   function() {
    return {
@@ -181,7 +182,6 @@ app.controller("ctrl", function ($scope, $http, $timeout) {
 					$s.pesquisa.items.push(data.o);
 				}
 			}
-
 		});
 	}
 	
@@ -190,13 +190,8 @@ app.controller("ctrl", function ($scope, $http, $timeout) {
 	}
 
 	$s.getById = function(id){
-		
 		get(url_getById, {id:id}, function(data){
 			$s.formEdicao.o = data.o;	
-			
-			//vm.records = data.o.opcoes;
-			console.log($s.pesquisa.items);
-
 		});
 	}
 
@@ -209,9 +204,6 @@ app.controller("ctrl", function ($scope, $http, $timeout) {
 		get(url_pesquisar, {text:text}, function(data){
 			// a lista de consulta recebe o retorno.
 			$s.pesquisa.items = data.list;	
-			
-			console.log($s.pesquisa.items);
-
 		});
 	}
 	
