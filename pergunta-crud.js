@@ -4,7 +4,7 @@ var vm;
 const url_pesquisar = '<url_pesquisar>';
 const url_getById = '<url_getById>';
 const url_remover = '<url_remover>';
-
+const url_salvar = '<url_salvar>';
 
 
 var app = angular.module("app",[]);
@@ -143,7 +143,7 @@ app.controller("ctrl", function ($scope, $http, $timeout) {
 	}
 
 	$s.opcaoUpdate = function(index) {
-        for (var i=0;i<$s.formEdicao.o.opcoes.length; i++) {
+        for (var i=0;i< $s.formEdicao.o.opcoes.length; i++) {
             if (index != i) {
                 $s.formEdicao.o.opcoes[i].correta = 'false';
             }
@@ -151,6 +151,22 @@ app.controller("ctrl", function ($scope, $http, $timeout) {
 	}
 	$s.btnVoltaAbaConsulta = function(){
 		$s.abaPesquisa();
+	}
+	
+	
+	$s.btnSalvar = function(){
+
+
+		post(url_salvar, {o:$s.formEdicao.o}, function(data){
+			
+			if (data.erro) {
+				$s.erro = data.erro;
+			} else {
+				//console.log(data.o);
+				$s.formEdicao.o = data.o;
+			}
+
+		});
 	}
 	
 	$s.abaPesquisa = function(){

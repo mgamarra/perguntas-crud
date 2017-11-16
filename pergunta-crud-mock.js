@@ -193,7 +193,43 @@ function clone(obj) {
 			return result;
 		}	
 		
+		if (url == url_salvar) {
+			var
+				o = clone(params.o)
+			;
 		
+		
+		
+			//remove as opções que foram deletadas
+			for (var i= o.opcoes.length -1 ; i > 0; i--) {
+				if (o.opcoes[i].status === 'deletado') {
+					o.opcoes.splice(i, 1);
+				}
+			}
+			
+			if ( (o.id != undefined ) &&  (o.id > -1)) {
+				
+				for (var i = 0; i < perguntas.length; i++) {
+					if ( perguntas[i].id ==  o.id ) {
+						perguntas[i] = o;
+						break;
+					}
+				}	
+			} else {
+				var maxId = -1;	
+
+				for (var i = 0; i < perguntas.length; i++) {
+					if ( perguntas[i].id > maxId ) {
+						maxId = perguntas[i].id;				
+					}
+				}	
+				o.id = 	maxId;
+				perguntas.push(o);
+			}
+			
+			data.o = o;
+			return result;
+		}
 		
 		if (url == url_pesquisar) {
 			data = {list : []};
