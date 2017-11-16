@@ -108,6 +108,14 @@ app.controller("ctrl", function ($scope, $http, $timeout) {
 		$s.pesquisa.items = [];	
 	}
 
+	$s.btnNovoRegistro = function(){
+		//limpa o form de edicao
+		$s.formEdicao.o = {opcoes : [{}]};
+
+		//set a aba do cadastro
+		$s.aba = 'cadastro';
+	}
+	
 	$s.btnRowEditClick = function(id) {
 		
 		//recupera o registro pelo id passado da grid

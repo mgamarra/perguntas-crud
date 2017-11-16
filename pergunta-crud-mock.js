@@ -223,7 +223,7 @@ function clone(obj) {
 						maxId = perguntas[i].id;				
 					}
 				}	
-				o.id = 	maxId;
+				o.id = 	maxId + 1;
 				perguntas.push(o);
 			}
 			
