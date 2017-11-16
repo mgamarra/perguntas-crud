@@ -52,7 +52,9 @@ app.controller("ctrl", function ($scope, $http, $timeout) {
 
 	$s.pesquisa = {};
 	$s.formEdicao = {};
-		
+	//contera a lista de perguntas consultadas
+	$s.pesquisa.items = [];		
+	
 	$s.aba = 'pesquisa';
 	$s1 = $scope;
 
@@ -163,15 +165,21 @@ app.controller("ctrl", function ($scope, $http, $timeout) {
 	
 	
 	$s.btnSalvar = function(){
-
-
-		post(url_salvar, {o:$s.formEdicao.o}, function(data){
+		
+		var 
+			o = $s.formEdicao.o
+			, novoRegistro = ((o.id == undefined ) ||  (o.id == -1)) 
+		;
+		post(url_salvar, {o: o}, function(data){
 			
 			if (data.erro) {
 				$s.erro = data.erro;
 			} else {
 				//console.log(data.o);
 				$s.formEdicao.o = data.o;
+				if (novoRegistro) {
+					$s.pesquisa.items.push(data.o);
+				}
 			}
 
 		});
