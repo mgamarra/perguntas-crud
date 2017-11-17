@@ -1,12 +1,16 @@
 <html ng-app="app" ng-controller="ctrl" ng-keydown="keydown($event)">
     <meta charset="UTF-8">
     <head>
-        <link href="source/bootstrap-3.3.7/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="source/bootstrap-3.3.7/css/bootstrap.min.css">
         <link rel="stylesheet" href="source/font-awesome-4.7.0/css/font-awesome.min.css" />
+        <link rel="stylesheet" href="source/angular-confirm-1.1.0/css/angular-confirm.min.css" />
         <link href="a.css" rel="stylesheet">
     </head>
     <body hidden="true">
-        <div id="main" class="container-fluid" style="margin-top: 50px">
+   <section id="usage" ng-controller="quickUseController">	
+<button ng-click="test()" class="btn btn-primary">test()</button>
+ </section>
+	<div id="main" class="container-fluid" style="margin-top: 50px">
         <div ng-show="erro" class="formPequeno alert alert-danger text-center">
             <strong>{{erro}}</strong>
         </div>
@@ -136,6 +140,8 @@
 </html>
 <script src="jquery-3.1.0.min.js"></script>
 <script src="angular-1.6.6.min.js"></script>
+<script src="source/angular-confirm-1.1.0/js/angular-confirm.min.js"></script>
+
 <script src="pergunta-crud-mock.js"></script>
 <script src="pergunta-crud.js"></script>
 <script src="pergunta-crud-list.js"></script>

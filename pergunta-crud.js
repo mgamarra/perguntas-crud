@@ -6,8 +6,54 @@ const url_getById = '<url_getById>';
 const url_remover = '<url_remover>';
 const url_salvar = '<url_salvar>';
 
+angular.module('application', ['cp.ngConfirm'])
+    .run([
+        '$ngConfirmDefaults',
+        function ($ngConfirmDefaults) {
+            // modify the defaults here.
+            // $ngConfirmDefaults.theme = 'modern';
+        }
+    ]);
+ 
 
-var app = angular.module("app",[]);
+var app = angular.module("app", ['cp.ngConfirm'])
+    .run([
+        '$ngConfirmDefaults',
+        function ($ngConfirmDefaults) {
+            // modify the defaults here.
+            // $ngConfirmDefaults.theme = 'modern';
+        }
+    ]);
+//app.controller("list", function ($scope, $http, $timeout) {
+	
+app.controller('quickUseController',
+        function ($scope, $ngConfirm/*, $interval, $ngConfirmDefaults, $timeout*/) {
+		$scope.test = function () {
+                $scope.name = 'Sia: cheap thrills';
+                $ngConfirm({
+                    title: 'Alert',
+                    icon: 'fa fa-info-circle',
+                    theme: 'material',
+                    content: '<div>Inspirations taken from Google\'s material design.' +
+                    '</div>',
+                    animation: 'scale',
+                    type: 'purple',
+                    closeAnimation: 'scale',
+                    buttons: {
+                        ok: {
+                            btnClass: "btn-blue",
+                        },
+                        close: function () {
+
+                        }
+                    },
+                })
+            }
+			
+			
+			
+});
+;
 
 //diretiva para resolver o post dos botoes
 app.directive('eatClick', function() {
@@ -110,6 +156,11 @@ app.controller("ctrl", function ($scope, $http, $timeout) {
 		$s.pesquisa.items = [];	
 	}
 
+	
+	
+	$s.test = function(){
+        $scope.name = 'Sia: cheap thrills';
+    }	
 
 
 	$('body').show();
