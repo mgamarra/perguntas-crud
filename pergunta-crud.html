@@ -10,8 +10,8 @@
         <div ng-show="erro" class="formPequeno alert alert-danger text-center">
             <strong>{{erro}}</strong>
         </div>
-        <!-- aba de consulta -->
-        <div class="container" ng-show="aba == 'pesquisa'">
+        <!-- aba de consulta , trabalha com o controller pergunta-crud-list.js-->
+        <div class="container" ng-controller="list" ng-show="aba == 'pesquisa'">
             <h3>Pesquisa de Perguntas</h3>
             <form action="" class="form-horizontal">
                 <fieldset>
@@ -48,22 +48,31 @@
                             <button class="btn btn-danger" 
                                 ng-click="btnRowRemoveClick(o.id)" 
                                 ng-confirm-click="Confirma a exclusão ?"
-                                ><i class="glyphicon glyphicon-remove"></i></button>
+                                ><i class="glyphicon glyphicon-remove"></i>
+							</button>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <!-- aba de edicao ou inclusao -->
-        <div class="container" ng-show="aba == 'cadastro'">
+        <!-- aba de edicao ou inclusao , trabalha com o controller pergunta-crud-edit.js-->
+        <div class="container" ng-controller="edit" ng-show="aba == 'cadastro'">
             <div class="row">
                 <div class="col-sm-6 text-left">
                     <button type="button" class="btn btn-primary" ng-click="btnVoltaAbaConsulta()">Consulta</button>
 					<button type="button" class="btn btn-success" ng-click="btnNovoRegistro()"><span class="glyphicon glyphicon-plus" eat-click></span> Nova Pergunta</button>
+					<!-- esse botão só aparece se for edição formEdicao.o.id > -1-->
+					<button type="button" class="btn btn-danger" 
+						ng-click="btnRowRemoveClick(o.id)" 
+						ng-confirm-click="Confirma a exclusão ?"
+						ng-show="formEdicao.o.id > -1"
+						><span class="glyphicon glyphicon-remove"></span>Remover</i>
+					</button>
+					
                 </div>
                 <div class="col-sm-6 text-right">
                     <button type="button" class="btn btn-primary"  ng-click="btnSalvar()">
-                    <span class="glyphicon glyphicon-plus"></span> Salvar
+						<span class="glyphicon glyphicon-plus"></span> Salvar
                     </button>
                 </div>
             </div>
@@ -129,3 +138,5 @@
 <script src="angular-1.6.6.min.js"></script>
 <script src="pergunta-crud-mock.js"></script>
 <script src="pergunta-crud.js"></script>
+<script src="pergunta-crud-list.js"></script>
+<script src="pergunta-crud-edit.js"></script>

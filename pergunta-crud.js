@@ -1,4 +1,4 @@
-var $s, $s1;
+var $s;
 var vm;
 
 const url_pesquisar = '<url_pesquisar>';
@@ -41,9 +41,49 @@ app.directive("ngConfirmClick", [
   }
 ])
 
+function request(func, url, params, onSuccessFunction, onFailFunction) {
+	
+	if (params instanceof Function) {
+		$s.erro = 'params instanceof Function';
+		return;
+	}
+	if (onSuccessFunction && !(onSuccessFunction instanceof Function)){
+		$s.erro = '!(onSuccessFunction instanceof Function)';
+		return;
+	}
+	if (onFailFunction && !(onFailFunction instanceof Function)){
+		$s.erro = '!(onFailFunction instanceof Function)';
+		return;
+	}		
+	
+	var rp = { headers: {'Content-Type': 'application/json'}};
+	if(!params) params = [];
+	if (params.responseType) {
+		rp.responseType = 'arraybuffer';
+	}		
+	func(url, params, rp).then(
+		function(data){
+			if (data.erro) {
+				if (onFailFunction) onFailFunction(data);	
+			} else {
+			if (onSuccessFunction) onSuccessFunction(data);	
+			}
+		},
+		function(data){
+			if (onFailFunction) onFailFunction(data);
+		},
+	);
+}
+var post = function(url, params, onSuccessFunction, onFailFunction) {
+	request($s.http.post, url, params, onSuccessFunction, onFailFunction);
+}
+var get = function(url, params, onSuccessFunction, onFailFunction) {
+	request($s.http.get, url, params, onSuccessFunction, onFailFunction);
+}
+
+
 
 app.controller("ctrl", function ($scope, $http, $timeout) {
-
 		
 	$s = $scope;
 	
@@ -57,47 +97,6 @@ app.controller("ctrl", function ($scope, $http, $timeout) {
 	$s.pesquisa.items = [];		
 	
 	$s.aba = 'pesquisa';
-	$s1 = $scope;
-
-	function request(func, url, params, onSuccessFunction, onFailFunction) {
-		
-		if (params instanceof Function) {
-			$s.erro = 'params instanceof Function';
-			return;
-		}
-		if (onSuccessFunction && !(onSuccessFunction instanceof Function)){
-			$s.erro = '!(onSuccessFunction instanceof Function)';
-			return;
-		}
-		if (onFailFunction && !(onFailFunction instanceof Function)){
-			$s.erro = '!(onFailFunction instanceof Function)';
-			return;
-		}		
-		
-    	var rp = { headers: {'Content-Type': 'application/json'}};
-		if(!params) params = [];
-    	if (params.responseType) {
-    		rp.responseType = 'arraybuffer';
-    	}		
-		func(url, params, rp).then(
-			function(data){
-				if (data.erro) {
-					if (onFailFunction) onFailFunction(data);	
-				} else {
-				if (onSuccessFunction) onSuccessFunction(data);	
-				}
-			},
-			function(data){
-				if (onFailFunction) onFailFunction(data);
-			},
-		);
-    }
-	var post = function(url, params, onSuccessFunction, onFailFunction) {
-		request($s.http.post, url, params, onSuccessFunction, onFailFunction);
-	}
-	var get = function(url, params, onSuccessFunction, onFailFunction) {
-		request($s.http.get, url, params, onSuccessFunction, onFailFunction);
-	}
 
 	$s.btnPesquisarClick = function(){
 		$s.pesquisaExecutar();
@@ -111,114 +110,7 @@ app.controller("ctrl", function ($scope, $http, $timeout) {
 		$s.pesquisa.items = [];	
 	}
 
-	$s.btnNovoRegistro = function(){
-		//limpa o form de edicao
-		$s.formEdicao.o = {opcoes : [{}]};
 
-		//set a aba do cadastro
-		$s.aba = 'cadastro';
-	}
-	
-	$s.btnRowEditClick = function(id) {
-		
-		//recupera o registro pelo id passado da grid
-		get(url_getById, {id:id}, function(data){
-			
-			//coloco o objeto model
-			$s.formEdicao.o = data.o;	
-			//set a aba do cadastro
-			$s.aba = 'cadastro';
-
-		});		
-	}
-	$s.btnRowRemoveClick = function(id){
-		get(url_remover, {id:id}, function(data){
-			
-			if (data.erro) {
-				$s.erro = data.erro;
-			} else {
-				var index = -1;	
-				for (var i = 0; i < $s.pesquisa.items.length; i++) {
-					if ( $s.pesquisa.items[i].id === id ) {
-						index = i;
-						break;				
-					}
-				}
-				if( index !== -1 ) {
-					$s.pesquisa.items.splice( index, 1 );	
-				}
-			}
-
-		});
-
-	}
-
-	$s.opcaoUpdate = function(index) {
-        for (var i=0;i< $s.formEdicao.o.opcoes.length; i++) {
-            if (index != i) {
-                $s.formEdicao.o.opcoes[i].correta = 'false';
-            }
-        }
-	}
-	$s.btnVoltaAbaConsulta = function(){
-		$s.abaPesquisa();
-	}
-	
-	
-	$s.btnSalvar = function(){
-		
-		var 
-			o = $s.formEdicao.o
-			, novoRegistro = ((o.id == undefined ) ||  (o.id == -1)) 
-		;
-		post(url_salvar, {o: o}, function(data){
-			
-			if (data.erro) {
-				$s.erro = data.erro;
-			} else {
-				//console.log(data.o);
-				$s.formEdicao.o = data.o;
-				if (novoRegistro) {
-					$s.pesquisa.items.push(data.o);
-				}
-			}
-		});
-	}
-	
-	$s.abaPesquisa = function(){
-		$s.aba = 'pesquisa';
-	}
-
-	$s.getById = function(id){
-		get(url_getById, {id:id}, function(data){
-			$s.formEdicao.o = data.o;	
-		});
-	}
-
-	$s.pesquisaExecutar = function(){
-		//limpa a lista de consulta, nesse momento a table fica vazia e é oculta pela diretiva ng-show 
-		$s.pesquisa.items = [];	
-		// caso o campo de pesquisa esteja preenchido, usar texto para pesquisa, caso contrário usar branco
-		let text = $s.pes  ? $s.pes.text : '';
-		
-		get(url_pesquisar, {text:text}, function(data){
-			// a lista de consulta recebe o retorno.
-			$s.pesquisa.items = data.list;	
-		});
-	}
-	
-	$s.opcoesRemover = function(index){
-		//$s.formEdicao.o.opcoes.splice(index, 1);]
-		if ($s.formEdicao.o.opcoes[index].status == 'deletado' ) {
-			$s.formEdicao.o.opcoes[index].status = '';
-		} else {
-			$s.formEdicao.o.opcoes[index].status = 'deletado';
-		}
-	}
-	$s.opcoesAdicionar = function(){
-		$s.formEdicao.o.opcoes.push({id: null, text:'', correta: false});
-	}	
-	
 
 	$('body').show();
 
