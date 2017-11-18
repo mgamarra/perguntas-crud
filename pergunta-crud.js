@@ -6,54 +6,9 @@ const url_getById = '<url_getById>';
 const url_remover = '<url_remover>';
 const url_salvar = '<url_salvar>';
 
-angular.module('application', ['cp.ngConfirm'])
-    .run([
-        '$ngConfirmDefaults',
-        function ($ngConfirmDefaults) {
-            // modify the defaults here.
-            // $ngConfirmDefaults.theme = 'modern';
-        }
-    ]);
- 
 
-var app = angular.module("app", ['cp.ngConfirm'])
-    .run([
-        '$ngConfirmDefaults',
-        function ($ngConfirmDefaults) {
-            // modify the defaults here.
-            // $ngConfirmDefaults.theme = 'modern';
-        }
-    ]);
-//app.controller("list", function ($scope, $http, $timeout) {
+var app = angular.module("app",[]);
 	
-app.controller('quickUseController',
-        function ($scope, $ngConfirm/*, $interval, $ngConfirmDefaults, $timeout*/) {
-		$scope.test = function () {
-                $scope.name = 'Sia: cheap thrills';
-                $ngConfirm({
-                    title: 'Alert',
-                    icon: 'fa fa-info-circle',
-                    theme: 'material',
-                    content: '<div>Inspirations taken from Google\'s material design.' +
-                    '</div>',
-                    animation: 'scale',
-                    type: 'purple',
-                    closeAnimation: 'scale',
-                    buttons: {
-                        ok: {
-                            btnClass: "btn-blue",
-                        },
-                        close: function () {
-
-                        }
-                    },
-                })
-            }
-			
-			
-			
-});
-;
 
 //diretiva para resolver o post dos botoes
 app.directive('eatClick', function() {
@@ -64,28 +19,6 @@ app.directive('eatClick', function() {
     }
 });
 
-
-
-//diretiva para exibir a tela de confirmação. Usada na consulta de questões
-//devese colocar o atributo ng-confirm-click no botao 
-app.directive("ngConfirmClick", [
-  function() {
-   return {
-     priority: -1,
-      restrict: "A",
-      link: function(scope, element, attrs) {
-        element.bind("click", function(e) {
-          var message;
-          message = attrs.ngConfirmClick;
-          if (message && !confirm(message)) {
-           e.stopImmediatePropagation();
-           e.preventDefault();
-          }
-        });
-      }
-    };
-  }
-])
 
 function request(func, url, params, onSuccessFunction, onFailFunction) {
 	
@@ -136,31 +69,13 @@ app.controller("ctrl", function ($scope, $http, $timeout) {
 	vm = this;
 	//$s.http = $http;
 	$s.http = httpMock;
-
-	$s.pesquisa = {};
-	$s.formEdicao = {};
+	//inicia o form de pesquisa
+	$s.pes = {text:""};
 	//contera a lista de perguntas consultadas
-	$s.pesquisa.items = [];		
+	$s.pesquisa = {items:[]};
+	$s.formEdicao = {};
 	
 	$s.aba = 'pesquisa';
-
-	$s.btnPesquisarClick = function(){
-		$s.pesquisaExecutar();
-	}
-
-	$s.btnPesquisaLimparClick = function(){
-		//limpa o form de pesquisa
-		$s.pes = {};
-
-		//limpa a lista de consulta, nesse momento a table fica vazia e é oculta pela diretiva ng-show 
-		$s.pesquisa.items = [];	
-	}
-
-	
-	
-	$s.test = function(){
-        $scope.name = 'Sia: cheap thrills';
-    }	
 
 
 	$('body').show();

@@ -3,13 +3,11 @@
     <head>
         <link rel="stylesheet" href="source/bootstrap-3.3.7/css/bootstrap.min.css">
         <link rel="stylesheet" href="source/font-awesome-4.7.0/css/font-awesome.min.css" />
-        <link rel="stylesheet" href="source/angular-confirm-1.1.0/css/angular-confirm.min.css" />
+        <link rel="stylesheet" href="source/jquery-confirm-3.3.2/css/jquery-confirm.css" />
         <link href="a.css" rel="stylesheet">
     </head>
     <body hidden="true">
-   <section id="usage" ng-controller="quickUseController">	
-<button ng-click="test()" class="btn btn-primary">test()</button>
- </section>
+
 	<div id="main" class="container-fluid" style="margin-top: 50px">
         <div ng-show="erro" class="formPequeno alert alert-danger text-center">
             <strong>{{erro}}</strong>
@@ -50,8 +48,7 @@
                             <button class="btn btn-warning" ng-click="btnRowEditClick(o.id)"><i class="glyphicon glyphicon-pencil"></i></button>
                             <!-- a diretiva ng-confirm-clic apresenta a mensssagem de confirmação antes da exclusao-->
                             <button class="btn btn-danger" 
-                                ng-click="btnRowRemoveClick(o.id)" 
-                                ng-confirm-click="Confirma a exclusão ?"
+                                ng-click="btnRemoveClick(o.id)" 
                                 ><i class="glyphicon glyphicon-remove"></i>
 							</button>
                         </td>
@@ -67,8 +64,7 @@
 					<button type="button" class="btn btn-success" ng-click="btnNovoRegistro()"><span class="glyphicon glyphicon-plus" eat-click></span> Nova Pergunta</button>
 					<!-- esse botão só aparece se for edição formEdicao.o.id > -1-->
 					<button type="button" class="btn btn-danger" 
-						ng-click="btnRowRemoveClick(o.id)" 
-						ng-confirm-click="Confirma a exclusão ?"
+						ng-click="btnRemoveClick(formEdicao.o.id)" 
 						ng-show="formEdicao.o.id > -1"
 						><span class="glyphicon glyphicon-remove"></span>Remover</i>
 					</button>
@@ -140,7 +136,7 @@
 </html>
 <script src="jquery-3.1.0.min.js"></script>
 <script src="angular-1.6.6.min.js"></script>
-<script src="source/angular-confirm-1.1.0/js/angular-confirm.min.js"></script>
+<script src="source/jquery-confirm-3.3.2/js/jquery-confirm.js"></script>
 
 <script src="pergunta-crud-mock.js"></script>
 <script src="pergunta-crud.js"></script>
